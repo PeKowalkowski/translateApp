@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-
 public class WordsService {
 
     private Logger logger = LoggerFactory.getLogger(WordsService.class);
@@ -56,6 +55,7 @@ public class WordsService {
 
     public Optional<Words> getWordById(Long id) {
         Optional<Words> word = wordsRepository.findById(id);
+        logger.info("Loaded word with id : " + id);
         return word;
     }
 
