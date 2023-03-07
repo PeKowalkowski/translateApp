@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NonExistWordsRepository extends JpaRepository<NonExistWords, Long> {
 
- /*   void saveNewEnglishWord(Long englishWordId);*/
+
 }

@@ -1,9 +1,11 @@
 package com.example.translateApp.translateApp.services;
 
 import com.example.translateApp.translateApp.entities.Dictionary;
-import com.lowagie.text.*;
 import com.lowagie.text.Font;
-import com.lowagie.text.pdf.*;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.awt.*;
@@ -18,7 +20,7 @@ public class PdfGenerator {
         this.dictionaryList = dictionaryList;
     }
 
-    private void writeTableHeader(PdfPTable pdfTable){
+    private void writeTableHeader(PdfPTable pdfTable) {
 
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(Color.BLUE);
@@ -42,12 +44,11 @@ public class PdfGenerator {
     private void writeTableData(PdfPTable table) {
         for (Dictionary dictionary : dictionaryList) {
             table.addCell(String.valueOf(dictionary.getId()));
-            table.addCell(String.valueOf(dictionary.getEnglishWords()));
-            table.addCell(String.valueOf(dictionary.getPolishWords()));
+            table.addCell(String.valueOf(dictionary.getWords()));
         }
     }
 
-    public void export(HttpServletResponse response) throws DocumentException, IOException{
+    public void export(HttpServletResponse response) throws DocumentException, IOException {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, response.getOutputStream());
 
@@ -63,7 +64,7 @@ public class PdfGenerator {
 
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {1.5f, 3.5f, 3.0f, 3.0f, 1.5f});
+        table.setWidths(new float[]{1.5f, 3.5f, 3.0f, 3.0f, 1.5f});
         table.setSpacingBefore(10);
 
         writeTableHeader(table);
