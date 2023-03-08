@@ -23,36 +23,53 @@ public class WordsController {
     }
 
     @PostMapping("/addWordWithAssignedWord")
-    ResponseEntity<WordsDto> addWordWithAssignedWord(@RequestBody WordsDto wordsDto){
+    ResponseEntity<WordsDto> addWordWithAssignedWord(@RequestBody WordsDto wordsDto) {
         WordsDto wordsDto1 = wordsService.addWordsWithAssignedWord(wordsDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(wordsDto1);
+    }
 
+    @GetMapping("/getWords")
+    public ResponseEntity<List<Words>> getWords() {
+        List<Words> wordsList = wordsService.getWords();
+        return ResponseEntity.ok(wordsList);
     }
+
     @GetMapping("/getWords/{pageNumber}/{pageSize}")
-    public ResponseEntity<Page<Words>> getDictionariesPageNoAndPageSize(@PathVariable int pageNumber, @PathVariable int pageSize){
-        Page<Words> words = wordsService.getWordsPageNoAndPageSize( pageNumber,pageSize);
-        return ResponseEntity.ok(words);
+    public ResponseEntity<Page<Words>> getWordsPageNoAndPageSize(@PathVariable int pageNumber, @PathVariable int pageSize) {
+        Page<Words> wordsPage = wordsService.getWordsPageNoAndPageSize(pageNumber, pageSize);
+        return ResponseEntity.ok(wordsPage);
     }
+
     @GetMapping("/getWordById/{id}")
     public ResponseEntity<Optional<Words>> getWordById(@PathVariable Long id) {
         Optional<Words> word = Optional.ofNullable(wordsService.getWordById(id)
                 .orElseThrow(() -> new WordNotFoundException(id)));
         return ResponseEntity.ok(word);
     }
+
     @GetMapping("/translate/{word}")
     public ResponseEntity<List<Words>> translateWord(@PathVariable String word) {
         List<Words> wordsList = wordsService.getByWord(word);
         return ResponseEntity.ok(wordsList);
     }
-    @GetMapping("/polishWord/{length}")
-    public ResponseEntity<List<Words>> getPolishWordsWithLength(@PathVariable Long length) {
-        List<Words> polishWordsList = wordsService.getPolishWordsWithLength(length);
-        return ResponseEntity.ok(polishWordsList);
+
+    @GetMapping("/translateSentence/{sentence}")
+    public ResponseEntity<String[]> translateSentence(@PathVariable String sentence) {
+        String[] wordsList = wordsService.getBySentence(sentence);
+        return ResponseEntity.ok(wordsList);
     }
+
+
+    @GetMapping("/polishWord/{length}")
+    public ResponseEntity<Long> getPolishWordsWithLength(@PathVariable Long length) {
+        Long amount = wordsService.getPolishWordsWithLength(length);
+        return ResponseEntity.ok(amount);
+    }
+
     @GetMapping("/englishWords/{length}")
-    public ResponseEntity<List<Words>> getEnglishWordsWithLength(@PathVariable Long length) {
-        List<Words> englishWordsList = wordsService.getEnglishWordsWithLength(length);
-        return ResponseEntity.ok(englishWordsList);
+    public ResponseEntity<Long> getEnglishWordsWithLength(@PathVariable Long length) {
+        Long amount = wordsService.getEnglishWordsWithLength(length);
+        return ResponseEntity.ok(amount);
     }
 
     @GetMapping("/polishWord/amountOfPolishWords/")
@@ -66,25 +83,24 @@ public class WordsController {
         Long amount = wordsService.getAmountOfEnglishWords();
         return ResponseEntity.ok(amount);
     }
+
     @GetMapping("/polishWord/averageLength")
-    public ResponseEntity<Long> getAvgLengthOfPolishWords(){
+    public ResponseEntity<Long> getAvgLengthOfPolishWords() {
         Long avg = wordsService.getAvgLengthOfPolishWords();
         return ResponseEntity.ok(avg);
     }
+
     @GetMapping("/englishWord/averageLength")
-    public ResponseEntity<Long> getAvgLengthOfEnglishWords(){
+    public ResponseEntity<Long> getAvgLengthOfEnglishWords() {
         Long avg = wordsService.getAvgLengthOfEnglishWords();
         return ResponseEntity.ok(avg);
     }
-    @GetMapping("polishWord/getPolishRaport/{length}")
-    public ResponseEntity<String> getPolishRaport(@PathVariable Long length){
-        String raport = wordsService.getPolishRaport(length);
+
+    @GetMapping("getRaport/{polishLength}/{englishLength}")
+    public ResponseEntity<String> getPolishRaport(@PathVariable Long polishLength, @PathVariable Long englishLength) {
+        String raport = wordsService.getRaport(polishLength, englishLength);
         return ResponseEntity.ok(raport);
     }
-    @GetMapping("englishWord/getEnglishRaport/{length}")
-    public ResponseEntity<String> getEnglishRaport(@PathVariable Long length){
-        String raport = wordsService.getEnglishRaport(length);
-        return ResponseEntity.ok(raport);
-    }
+
 
 }
