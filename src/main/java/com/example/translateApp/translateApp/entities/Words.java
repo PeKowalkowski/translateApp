@@ -28,6 +28,7 @@ public class Words {
     @JoinColumn(name = "dictionary_id")
     private Dictionary dictionary;
 
+
     public Words(Long id, String word, Language language, AssignedWord assignedWord) {
         this.id = id;
         this.word = word;
@@ -36,6 +37,14 @@ public class Words {
     }
 
     public Words(Long id, String word) {
+    }
+
+    public Words(AssignedWord assignedWord) {
+        this.assignedWord = assignedWord;
+    }
+
+    public Words(String word) {
+        this.word = word;
     }
 
     public Long getId() {
@@ -77,6 +86,7 @@ public class Words {
     public void setDictionary(Dictionary dictionary) {
         this.dictionary = dictionary;
     }
+
 
     @Override
     public boolean equals(Object o) {

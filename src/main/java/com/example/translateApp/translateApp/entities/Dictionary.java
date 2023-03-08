@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "dictionary")
 @NoArgsConstructor
@@ -32,5 +34,26 @@ public class Dictionary {
 
     public void setWords(Words words) {
         this.words = words;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Dictionary that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(words, that.words);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, words);
+    }
+
+    @Override
+    public String toString() {
+        return "Dictionary{" +
+                "id=" + id +
+                ", words=" + words +
+                '}';
     }
 }

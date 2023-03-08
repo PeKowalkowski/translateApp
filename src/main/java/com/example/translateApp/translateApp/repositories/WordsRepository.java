@@ -14,11 +14,11 @@ public interface WordsRepository extends JpaRepository<Words, Long> {
     @Query("select wrd from Words wrd where wrd.word =:w")
     public List<Words> getByWord(@Param("w") String word);
 
-    @Query("select wrd from Words wrd where LENGTH(word)=:l and wrd.language = 'POLISH'")
-    public List<Words> getPolishWordsByLength(@Param("l") Long length);
+    @Query("select count(word) from Words wrd where LENGTH(word)=:l and wrd.language = 'POLISH'")
+    public Long getPolishWordsByLength(@Param("l") Long length);
 
-    @Query("select wrd from Words wrd where LENGTH(word)=:l and wrd.language = 'ENGLISH'")
-    public List<Words> getEnglishWordsByLength(@Param("l") Long length);
+    @Query("select count(word) from Words wrd where LENGTH(word)=:l and wrd.language = 'ENGLISH'")
+    public Long getEnglishWordsByLength(@Param("l") Long length);
 
     @Query(value = "select count(word) from Words wrd where wrd.language = 'POLISH'")
     public Long getAmountOfPolishWords();

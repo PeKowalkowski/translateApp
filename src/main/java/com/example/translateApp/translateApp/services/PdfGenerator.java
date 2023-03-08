@@ -1,6 +1,6 @@
 package com.example.translateApp.translateApp.services;
 
-import com.example.translateApp.translateApp.entities.Dictionary;
+import com.example.translateApp.translateApp.entities.Raport;
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
@@ -14,10 +14,14 @@ import java.util.List;
 
 public class PdfGenerator {
 
-    private List<Dictionary> dictionaryList;
 
-    public PdfGenerator(List<Dictionary> dictionaryList) {
-        this.dictionaryList = dictionaryList;
+    private List<Raport> raportList;
+
+    public PdfGenerator(List<Raport> raportList) {
+        this.raportList = raportList;
+    }
+
+    public PdfGenerator(String raport) {
     }
 
     private void writeTableHeader(PdfPTable pdfTable) {
@@ -29,24 +33,50 @@ public class PdfGenerator {
         Font font = FontFactory.getFont(FontFactory.HELVETICA);
         font.setColor(Color.WHITE);
 
+
         cell.setPhrase(new Phrase("ID", font));
-
         pdfTable.addCell(cell);
 
-        cell.setPhrase(new Phrase("ENGLISH_WORDS_ID", font));
+        cell.setPhrase(new Phrase("Amount Of Polish Words", font));
         pdfTable.addCell(cell);
 
-        cell.setPhrase(new Phrase("POLISH_WORDS_ID", font));
+        cell.setPhrase(new Phrase("Average Length Of Polish Words", font));
         pdfTable.addCell(cell);
+
+        cell.setPhrase(new Phrase("Polish Words With Length", font));
+        pdfTable.addCell(cell);
+
+        cell.setPhrase(new Phrase("Amount Of English Words", font));
+        pdfTable.addCell(cell);
+
+        cell.setPhrase(new Phrase("Average Length Of English Words", font));
+        pdfTable.addCell(cell);
+
+        cell.setPhrase(new Phrase("English Words With Length", font));
+        pdfTable.addCell(cell);
+
+        cell.setPhrase(new Phrase("Amount Of Non ExistWords", font));
+        pdfTable.addCell(cell);
+
 
     }
 
     private void writeTableData(PdfPTable table) {
-        for (Dictionary dictionary : dictionaryList) {
-            table.addCell(String.valueOf(dictionary.getId()));
-            table.addCell(String.valueOf(dictionary.getWords()));
+        for (Raport raport : raportList) {
+
+
+            table.addCell(String.valueOf(raport.getId()));
+            table.addCell(String.valueOf(raport.getAmountOfPolishWords()));
+            table.addCell(String.valueOf(raport.getAverageLengthOfPolishWords()));
+            table.addCell(String.valueOf(raport.getPolishWordsWithLength()));
+            table.addCell(String.valueOf(raport.getAmountOfEnglishWords()));
+            table.addCell(String.valueOf(raport.getAverageLengthOfEnglishWords()));
+            table.addCell(String.valueOf(raport.getEnglishWordsWithLength()));
+            table.addCell(String.valueOf(raport.getAmountOfNonExistWords()));
+
         }
     }
+
 
     public void export(HttpServletResponse response) throws DocumentException, IOException {
         Document document = new Document(PageSize.A4);

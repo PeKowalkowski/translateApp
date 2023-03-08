@@ -5,7 +5,7 @@ import com.example.translateApp.translateApp.entities.Words;
 import org.springframework.stereotype.Component;
 
 @Component
-public class WordsMapperImpl implements WordsMapper {
+public class WordsMapperImpl implements WordsMapper{
     @Override
     public WordsDto wordsToWordsDto(Words words) {
         WordsDto wordsDto = new WordsDto();
@@ -14,7 +14,7 @@ public class WordsMapperImpl implements WordsMapper {
         wordsDto.setWord(words.getWord());
         wordsDto.setLanguage(words.getLanguage());
         wordsDto.setAssignedWord(words.getAssignedWord());
-
+        wordsDto.setDictionary(words.getDictionary());
         return wordsDto;
     }
 
@@ -26,6 +26,7 @@ public class WordsMapperImpl implements WordsMapper {
         words.setWord(wordsDto.getWord());
         words.setLanguage(wordsDto.getLanguage());
         words.setAssignedWord(wordsDto.getAssignedWord());
+        words.setDictionary(wordsDto.getDictionary());
 
         return words;
     }

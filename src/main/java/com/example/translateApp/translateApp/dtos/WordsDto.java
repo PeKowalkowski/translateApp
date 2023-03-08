@@ -1,6 +1,7 @@
 package com.example.translateApp.translateApp.dtos;
 
 import com.example.translateApp.translateApp.entities.AssignedWord;
+import com.example.translateApp.translateApp.entities.Dictionary;
 import com.example.translateApp.translateApp.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class WordsDto {
     private String word;
     private Language language;
     private AssignedWord assignedWord;
-    /*private Dictionary dictionary;*/
+    private Dictionary dictionary;
 
     public Long getId() {
         return id;
@@ -49,13 +50,13 @@ public class WordsDto {
         this.assignedWord = assignedWord;
     }
 
-    /*public Dictionary getDictionary() {
+    public Dictionary getDictionary() {
         return dictionary;
     }
 
     public void setDictionary(Dictionary dictionary) {
         this.dictionary = dictionary;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -63,12 +64,12 @@ public class WordsDto {
         if (!(o instanceof WordsDto wordsDto)) return false;
         return Objects.equals(id, wordsDto.id) && Objects.equals(word, wordsDto.word)
                 && language == wordsDto.language && Objects.equals(assignedWord, wordsDto.assignedWord)
-                /*&& Objects.equals(dictionary, wordsDto.dictionary)*/;
+                && Objects.equals(dictionary, wordsDto.dictionary);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, word, language, assignedWord/*, dictionary*/);
+        return Objects.hash(id, word, language, assignedWord, dictionary);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class WordsDto {
                 ", word='" + word + '\'' +
                 ", language=" + language +
                 ", assignedWord=" + assignedWord +
-                /*", dictionary=" + dictionary +*/
+                ", dictionary=" + dictionary +
                 '}';
     }
 }
