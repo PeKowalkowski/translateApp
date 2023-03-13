@@ -47,6 +47,24 @@ public class Words {
         this.word = word;
     }
 
+
+
+    public Words(String word, Language language) {
+        this.word = word;
+        this.language = language;
+    }
+
+    public Words(String word, AssignedWord assignedWord) {
+        this.word = word;
+        this.assignedWord = assignedWord;
+    }
+
+    public Words(Long id, String word, Language language) {
+        this.id = id;
+        this.word = word;
+        this.language = language;
+    }
+
     public Long getId() {
         return id;
     }

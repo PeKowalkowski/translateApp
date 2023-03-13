@@ -1,12 +1,14 @@
 package com.example.translateApp.translateApp.controllers;
 
 import com.example.translateApp.translateApp.entities.Dictionary;
+import com.example.translateApp.translateApp.entities.NonExistWords;
 import com.example.translateApp.translateApp.entities.Words;
 import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
 import com.example.translateApp.translateApp.repositories.DictionaryRepository;
 import com.example.translateApp.translateApp.repositories.WordsRepository;
 import com.example.translateApp.translateApp.services.DictionaryService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +42,14 @@ public class DictionaryController {
 
     @GetMapping("/getDictionaries")
     public ResponseEntity<List<Dictionary>> getDictionaries() {
-        List<Dictionary> dictionaryList = dictionaryService.getDictionaries();
-        return ResponseEntity.ok(dictionaryList);
+        try {
+            List<Dictionary> dictionaryList = dictionaryService.getDictionaries();
+            return new ResponseEntity<List<Dictionary>>(dictionaryList, HttpStatus.FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        /*List<Dictionary> dictionaryList = dictionaryService.getDictionaries();
+        return ResponseEntity.ok(dictionaryList);*/
     }
 
     @GetMapping("/getDictionaries/{pageNumber}/{pageSize}")

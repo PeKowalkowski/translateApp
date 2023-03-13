@@ -3,7 +3,9 @@ package com.example.translateApp.translateApp.entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +25,8 @@ public class Raport {
     private Long englishWordsWithLength;
     private Long amountOfNonExistWords;
 
+
+
     public Raport(Long amountOfPolishWords, Long averageLengthOfPolishWords, Long polishWordsWithLength, Long amountOfEnglishWords,
                   Long averageLengthOfEnglishWords, Long englishWordsWithLength, Long amountOfNonExistWords) {
         this.amountOfPolishWords = amountOfPolishWords;
@@ -33,6 +37,8 @@ public class Raport {
         this.englishWordsWithLength = englishWordsWithLength;
         this.amountOfNonExistWords = amountOfNonExistWords;
     }
+
+
 
     public Long getId() {
         return id;
@@ -98,6 +104,8 @@ public class Raport {
         this.amountOfNonExistWords = amountOfNonExistWords;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -127,4 +135,6 @@ public class Raport {
                 ", amountOfNonExistWords=" + amountOfNonExistWords +
                 '}';
     }
+
+
 }

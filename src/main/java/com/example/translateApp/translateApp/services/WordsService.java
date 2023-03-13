@@ -1,6 +1,7 @@
 package com.example.translateApp.translateApp.services;
 
 import com.example.translateApp.translateApp.dtos.WordsDto;
+import com.example.translateApp.translateApp.entities.AssignedWord;
 import com.example.translateApp.translateApp.entities.NonExistWords;
 import com.example.translateApp.translateApp.entities.Words;
 import com.example.translateApp.translateApp.mapper.WordsMapper;
@@ -43,10 +44,20 @@ public class WordsService {
         this.nonExistWordsService = nonExistWordsService;
     }
 
-    public WordsDto addWordsWithAssignedWord(WordsDto wordsDto) {
-        wordsRepository.save(wordsMapper.wordsDtoToWords(wordsDto));
-        return wordsDto;
 
+    public WordsDto addWordsWithAssignedWord(WordsDto wordsDto)  {
+        List<Words> wordsList = wordsRepository.findAll().stream()
+                .map(words -> {
+                    Words words1 = new Words(words.getWord());
+                    return words1;
+
+                })
+                .collect(Collectors.toList());
+        if(!wordsList.equals(wordsDto.getWord())){
+            wordsRepository.save(wordsMapper.wordsDtoToWords(wordsDto));
+        }else {
+        }
+        return wordsDto;
     }
 
     public List<Words> getWords() {
@@ -58,7 +69,6 @@ public class WordsService {
                 .collect(Collectors.toList());
         logger.info("Loaded all words from dictionary.");
         return wordsList;
-
     }
 
     public Page<Words> getWordsPageNoAndPageSize(int pageNumber, int pageSize) {
@@ -81,7 +91,6 @@ public class WordsService {
     }
 
     public List<Words> getByWord(String word) {
-
         List<Words> wordsList = wordsRepository.getByWord(word).stream()
                 .map(words -> {
                     Words words1 = new Words(words.getId(), words.getWord(), words.getLanguage(), words.getAssignedWord());
@@ -102,6 +111,8 @@ public class WordsService {
         return wordsList;
     }
 
+
+
     public String[] getBySentence(String sentence) {
         String[] splitString = sentence.split(" ");
         List<Words> wordsList = wordsRepository.findAll().stream()
@@ -113,7 +124,6 @@ public class WordsService {
         for (int i = 0; i <= splitString.length - 1; i++) {
             if (wordsList.contains(splitString[i])) {
                 getByWord(splitString[i]);
-
             } else if (!wordsList.contains(splitString[i])) {
                 NonExistWords nonExistWords = new NonExistWords(splitString[i]);
                 nonExistWordsRepository.save(nonExistWords);
@@ -124,7 +134,6 @@ public class WordsService {
 
     public Long getPolishWordsWithLength(Long length) {
         Long count = wordsRepository.getPolishWordsByLength(length);
-
         return count;
     }
 
@@ -171,20 +180,15 @@ public class WordsService {
                 + getEnglishWordsWithLength(englishWordLength) + ". Average length of English words = " + getAvgLengthOfEnglishWords() + ". Amount of non exist words = " + nonExistWordsService.getAmountOfNonExistWords());
 
     }
-    /*public String getRaport(*//*Long polishWordLength, Long englishWordLength*//*) {
-        getAmountOfPolishWords();
 
-        getAvgLengthOfPolishWords();
-        getAmountOfEnglishWords();
+   /* public List<Words> getByAssignedWord(String assignedWord) {
+        List<Words> wordsList = wordsRepository.getByAssignedWord(assignedWord).stream()
+                .map(asgWords -> {
+                    Words assignedWord1 = new Words(asgWords.getWord());
+                    return assignedWord1;
+                })
+                .collect(Collectors.toList());
 
-        getAvgLengthOfEnglishWords();
-        nonExistWordsService.getAmountOfNonExistWords();
-
-        return ("Amount of Polish words = " + getAmountOfPolishWords() +
-                ". Average length of Polish words = " + getAvgLengthOfPolishWords() + ". Amount of English words = " + getAmountOfEnglishWords() +
-                 ". Average length of English words = " + getAvgLengthOfEnglishWords() + ". Amount of non exist words = " + nonExistWordsService.getAmountOfNonExistWords());
-
+        return wordsList;
     }*/
-
-
 }
