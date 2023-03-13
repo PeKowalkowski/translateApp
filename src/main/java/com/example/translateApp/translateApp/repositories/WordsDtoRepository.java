@@ -1,12 +1,9 @@
 package com.example.translateApp.translateApp.repositories;
 
-import com.example.translateApp.translateApp.entities.AssignedWord;
+import com.example.translateApp.translateApp.dtos.WordsDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-
 @Repository
-public interface AssignedWordsRepository extends JpaRepository<AssignedWord, Long> {
-
+public interface WordsDtoRepository extends JpaRepository<WordsDto, Long> {
 }

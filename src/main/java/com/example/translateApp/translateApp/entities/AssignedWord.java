@@ -19,6 +19,15 @@ public class AssignedWord {
 
     private Language language;
 
+    public AssignedWord(String word) {
+        this.word = word;
+    }
+
+    public AssignedWord(String word, Language language) {
+        this.word = word;
+        this.language = language;
+    }
+
     public Long getId() {
         return id;
     }

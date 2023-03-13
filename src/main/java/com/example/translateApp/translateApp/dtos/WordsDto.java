@@ -18,6 +18,19 @@ public class WordsDto {
     private AssignedWord assignedWord;
     private Dictionary dictionary;
 
+    public WordsDto(String word, Language language, AssignedWord assignedWord) {
+        this.word = word;
+        this.language = language;
+        this.assignedWord = assignedWord;
+    }
+
+    public WordsDto(Long id, String word, Language language, AssignedWord assignedWord) {
+        this.id = id;
+        this.word = word;
+        this.language = language;
+        this.assignedWord = assignedWord;
+    }
+
     public Long getId() {
         return id;
     }

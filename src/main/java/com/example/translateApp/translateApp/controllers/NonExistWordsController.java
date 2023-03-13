@@ -1,8 +1,10 @@
 package com.example.translateApp.translateApp.controllers;
 
 import com.example.translateApp.translateApp.entities.NonExistWords;
+import com.example.translateApp.translateApp.entities.Words;
 import com.example.translateApp.translateApp.services.NonExistWordsService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +25,14 @@ public class NonExistWordsController {
 
     @GetMapping("/getNonExistWords")
     public ResponseEntity<List<NonExistWords>> getNonExisWords() {
-        List<NonExistWords> nonExistWordsList = nonExistWordsService.getNonExistWords();
-        return ResponseEntity.ok(nonExistWordsList);
+        try {
+            List<NonExistWords> nonExistWordsList = nonExistWordsService.getNonExistWords();
+            return new ResponseEntity<List<NonExistWords>>(nonExistWordsList, HttpStatus.FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        /*List<NonExistWords> nonExistWordsList = nonExistWordsService.getNonExistWords();
+        return ResponseEntity.ok(nonExistWordsList);*/
     }
 
     @GetMapping("/getNonExistWords/{pageNumber}/{pageSize}")

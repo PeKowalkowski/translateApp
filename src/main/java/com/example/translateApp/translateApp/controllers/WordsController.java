@@ -1,8 +1,10 @@
 package com.example.translateApp.translateApp.controllers;
 
 import com.example.translateApp.translateApp.dtos.WordsDto;
+import com.example.translateApp.translateApp.entities.AssignedWord;
 import com.example.translateApp.translateApp.entities.Words;
 import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
+import com.example.translateApp.translateApp.services.AssignedWordService;
 import com.example.translateApp.translateApp.services.WordsService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,10 +18,14 @@ import java.util.Optional;
 @RequestMapping("/api/words/")
 public class WordsController {
 
+
     private WordsService wordsService;
 
-    public WordsController(WordsService wordsService) {
+    private AssignedWordService assignedWordService;
+
+    public WordsController(WordsService wordsService, AssignedWordService assignedWordService) {
         this.wordsService = wordsService;
+        this.assignedWordService = assignedWordService;
     }
 
     @PostMapping("/addWordWithAssignedWord")
@@ -30,8 +36,12 @@ public class WordsController {
 
     @GetMapping("/getWords")
     public ResponseEntity<List<Words>> getWords() {
-        List<Words> wordsList = wordsService.getWords();
-        return ResponseEntity.ok(wordsList);
+        try {
+            List<Words> wordsList = wordsService.getWords();
+            return new ResponseEntity<List<Words>>(wordsList, HttpStatus.FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/getWords/{pageNumber}/{pageSize}")
@@ -40,18 +50,25 @@ public class WordsController {
         return ResponseEntity.ok(wordsPage);
     }
 
-    @GetMapping("/getWordById/{id}")
+   @GetMapping("/getWordById/{id}")
     public ResponseEntity<Optional<Words>> getWordById(@PathVariable Long id) {
         Optional<Words> word = Optional.ofNullable(wordsService.getWordById(id)
                 .orElseThrow(() -> new WordNotFoundException(id)));
         return ResponseEntity.ok(word);
     }
 
+
     @GetMapping("/translate/{word}")
     public ResponseEntity<List<Words>> translateWord(@PathVariable String word) {
+
         List<Words> wordsList = wordsService.getByWord(word);
         return ResponseEntity.ok(wordsList);
     }
+    /*@GetMapping("/getByAssignedWord/{assignedWord}")
+    public ResponseEntity<List<Words>> getByAssignedWord(@PathVariable String assignedWord) {
+        List<Words> wordsList = wordsService.getByAssignedWord(assignedWord);
+        return ResponseEntity.ok(wordsList);
+    }*/
 
     @GetMapping("/translateSentence/{sentence}")
     public ResponseEntity<String[]> translateSentence(@PathVariable String sentence) {

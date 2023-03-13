@@ -87,14 +87,14 @@ public class PdfGenerator {
         font.setSize(18);
         font.setColor(Color.BLUE);
 
-        Paragraph p = new Paragraph("List of Words", font);
+        Paragraph p = new Paragraph("Raport", font);
         p.setAlignment(Paragraph.ALIGN_CENTER);
 
         document.add(p);
 
-        PdfPTable table = new PdfPTable(5);
+        PdfPTable table = new PdfPTable(8);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[]{1.5f, 3.5f, 3.0f, 3.0f, 1.5f});
+        table.setWidths(new float[]{1f, 2f, 2f, 2f, 2f, 2f, 2f, 2.2f});
         table.setSpacingBefore(10);
 
         writeTableHeader(table);
