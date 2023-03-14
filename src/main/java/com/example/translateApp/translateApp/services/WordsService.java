@@ -4,6 +4,7 @@ import com.example.translateApp.translateApp.dtos.WordsDto;
 import com.example.translateApp.translateApp.entities.AssignedWord;
 import com.example.translateApp.translateApp.entities.NonExistWords;
 import com.example.translateApp.translateApp.entities.Words;
+import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
 import com.example.translateApp.translateApp.mapper.WordsMapper;
 import com.example.translateApp.translateApp.mapper.WordsMapper2;
 import com.example.translateApp.translateApp.repositories.NonExistWordsRepository;
@@ -85,7 +86,7 @@ public class WordsService {
 
 
     public Optional<Words> getWordById(Long id) {
-        Optional<Words> word = wordsRepository.findById(id);
+        Optional<Words> word = Optional.ofNullable(wordsRepository.findById(id).orElseThrow(() -> new WordNotFoundException(id)));
         logger.info("Loaded word with id : " + id);
         return word;
     }
@@ -93,7 +94,7 @@ public class WordsService {
     public List<Words> getByWord(String word) {
         List<Words> wordsList = wordsRepository.getByWord(word).stream()
                 .map(words -> {
-                    Words words1 = new Words(words.getId(), words.getWord(), words.getLanguage(), words.getAssignedWord());
+                    Words words1 = new Words(words.getAssignedWord().getWord());
                     return words1;
                 })
                 .collect(Collectors.toList());
@@ -181,14 +182,4 @@ public class WordsService {
 
     }
 
-   /* public List<Words> getByAssignedWord(String assignedWord) {
-        List<Words> wordsList = wordsRepository.getByAssignedWord(assignedWord).stream()
-                .map(asgWords -> {
-                    Words assignedWord1 = new Words(asgWords.getWord());
-                    return assignedWord1;
-                })
-                .collect(Collectors.toList());
-
-        return wordsList;
-    }*/
 }

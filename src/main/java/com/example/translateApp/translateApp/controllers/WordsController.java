@@ -64,11 +64,6 @@ public class WordsController {
         List<Words> wordsList = wordsService.getByWord(word);
         return ResponseEntity.ok(wordsList);
     }
-    /*@GetMapping("/getByAssignedWord/{assignedWord}")
-    public ResponseEntity<List<Words>> getByAssignedWord(@PathVariable String assignedWord) {
-        List<Words> wordsList = wordsService.getByAssignedWord(assignedWord);
-        return ResponseEntity.ok(wordsList);
-    }*/
 
     @GetMapping("/translateSentence/{sentence}")
     public ResponseEntity<String[]> translateSentence(@PathVariable String sentence) {
