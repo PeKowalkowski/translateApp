@@ -33,6 +33,4 @@ public interface WordsRepository extends JpaRepository<Words, Long> {
     @Query(value = "select avg(length(word)) from Words where language = 'ENGLISH'")
     public Long getAvgLengthOfEnglishWords();
 
-    /*@Query("select asgWrd from Words wrd join wrd.assignedWord asgWrd where asgWrd.word =:w")
-    public List<Words> getByAssignedWord(@Param("w") String word);*/
 }

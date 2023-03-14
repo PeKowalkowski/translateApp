@@ -1,6 +1,7 @@
 package com.example.translateApp.translateApp.services;
 
 import com.example.translateApp.translateApp.entities.Dictionary;
+import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
 import com.example.translateApp.translateApp.repositories.DictionaryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -54,7 +55,7 @@ public class DictionaryService {
     }
 
     public Optional<Dictionary> getDictionariesById(Long id) {
-        Optional<Dictionary> dictionary = dictionaryRepository.findById(id);
+        Optional<Dictionary> dictionary = Optional.ofNullable(dictionaryRepository.findById(id).orElseThrow(() -> new WordNotFoundException(id)));
         logger.info("Loaded record from dictionary with id : " + id + ".");
         return dictionary;
     }
