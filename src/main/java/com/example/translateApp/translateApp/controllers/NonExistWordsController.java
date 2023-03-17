@@ -2,6 +2,7 @@ package com.example.translateApp.translateApp.controllers;
 
 import com.example.translateApp.translateApp.entities.NonExistWords;
 import com.example.translateApp.translateApp.entities.Words;
+import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
 import com.example.translateApp.translateApp.services.NonExistWordsService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/nonExistWords")
@@ -31,8 +33,12 @@ public class NonExistWordsController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        /*List<NonExistWords> nonExistWordsList = nonExistWordsService.getNonExistWords();
-        return ResponseEntity.ok(nonExistWordsList);*/
+    }
+    @GetMapping("/getNonExistWordsById/{id}")
+    public ResponseEntity<Optional<NonExistWords>> getNonExistWordsById(@PathVariable Long id) {
+        Optional<NonExistWords> nonExistWords = Optional.ofNullable(nonExistWordsService.getNonExistWordsById(id)
+                .orElseThrow(() -> new WordNotFoundException(id)));
+        return ResponseEntity.ok(nonExistWords);
     }
 
     @GetMapping("/getNonExistWords/{pageNumber}/{pageSize}")

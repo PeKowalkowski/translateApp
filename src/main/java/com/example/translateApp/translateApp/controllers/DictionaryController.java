@@ -45,7 +45,7 @@ public class DictionaryController {
         try {
             List<Dictionary> dictionaryList = dictionaryService.getDictionaries();
             return new ResponseEntity<List<Dictionary>>(dictionaryList, HttpStatus.FOUND);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         /*List<Dictionary> dictionaryList = dictionaryService.getDictionaries();
@@ -59,12 +59,10 @@ public class DictionaryController {
     }
 
     @PutMapping("/addWordToDictionary/{wordId}")
-    public Dictionary addWordToDictionary(@PathVariable Long wordId) {
-        Words words = wordsRepository.findById(wordId).get();
-        Dictionary dictionary = new Dictionary();
+    public ResponseEntity<Dictionary> addWordToDictionary(@PathVariable Long wordId) {
+        Dictionary dictionary = dictionaryService.addWordToDictionary(wordId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dictionary);
 
-        dictionary.setWords(words);
-        return dictionaryRepository.save(dictionary);
     }
 
 

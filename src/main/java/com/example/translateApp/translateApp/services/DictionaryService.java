@@ -1,8 +1,10 @@
 package com.example.translateApp.translateApp.services;
 
 import com.example.translateApp.translateApp.entities.Dictionary;
+import com.example.translateApp.translateApp.entities.Words;
 import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
 import com.example.translateApp.translateApp.repositories.DictionaryRepository;
+import com.example.translateApp.translateApp.repositories.WordsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,19 +23,22 @@ public class DictionaryService {
 
     private DictionaryRepository dictionaryRepository;
 
+    private WordsRepository wordsRepository;
+
 
     private Logger logger = LoggerFactory.getLogger(DictionaryService.class);
 
 
-    public DictionaryService(DictionaryRepository dictionaryRepository) {
+    public DictionaryService(DictionaryRepository dictionaryRepository, WordsRepository wordsRepository) {
         this.dictionaryRepository = dictionaryRepository;
+        this.wordsRepository = wordsRepository;
     }
-
 
     public List<Dictionary> getDictionaries() {
         List<Dictionary> dictionaryList = dictionaryRepository.findAll().stream()
                 .map(dictionary -> {
                     Dictionary dictionary1 = new Dictionary(dictionary.getId(), dictionary.getWords());
+
                     return dictionary1;
                 })
                 .collect(Collectors.toList());
@@ -60,5 +65,15 @@ public class DictionaryService {
         return dictionary;
     }
 
+    public Dictionary addWordToDictionary(Long wordId) {
+        Words words = wordsRepository.findById(wordId).get();
+        Dictionary dictionary = new Dictionary();
 
+        dictionary.setWords(words);
+        dictionary.setWord(words.getWord());
+        dictionary.setTranslate(words.getAssignedWord().getWord());
+
+        logger.info("Added new word to dictionary :" + words.getWord() + ", with translation : " + words.getAssignedWord().getWord());
+        return dictionaryRepository.save(dictionary);
+    }
 }

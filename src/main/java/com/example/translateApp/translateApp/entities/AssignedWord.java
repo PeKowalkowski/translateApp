@@ -19,6 +19,7 @@ public class AssignedWord {
 
     private Language language;
 
+
     public AssignedWord(String word) {
         this.word = word;
     }
@@ -27,6 +28,7 @@ public class AssignedWord {
         this.word = word;
         this.language = language;
     }
+
 
     public Long getId() {
         return id;
@@ -44,6 +46,13 @@ public class AssignedWord {
         this.word = word;
     }
 
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -8,12 +8,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WordsRepository extends JpaRepository<Words, Long> {
 
     @Query("select wrd from Words wrd where wrd.word =:w")
     public List<Words> getByWord(@Param("w") String word);
+
+    @Query("select wrd from Words wrd where wrd.word =:w")
+    public Optional<Words> getByWord2(@Param("w") String word);
 
     @Query("select count(word) from Words wrd where LENGTH(word)=:l and wrd.language = 'POLISH'")
     public Long getPolishWordsByLength(@Param("l") Long length);
