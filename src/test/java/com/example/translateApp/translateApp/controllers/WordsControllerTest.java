@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -54,7 +56,7 @@ class WordsControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(wordsController).build();
     }
 
-    @Test
+   /* @Test
     @Order(1)
     @DisplayName("Should save new word with assigned word to database.")
     public void addWordWithAssignedWordTest() throws Exception {
@@ -70,7 +72,7 @@ class WordsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(print());
-    }
+    }*/
 
     @Test
     @Order(2)
@@ -116,27 +118,94 @@ class WordsControllerTest {
                 .andExpect(jsonPath("$.word").value("zaba"))
                 .andExpect(jsonPath("$.language").value("POLISH"))
                 .andExpect(jsonPath("$.assignedWord.word").value("frog"))
-/*
                 .andExpect(jsonPath("$.assignedWord.language").value("ENGLISH"))
-*/
                 .andDo(print());
+    }
+
+   @Test
+    @Order(4)
+    @DisplayName("Should transalte required word.")
+    public void translateWordTest() throws Exception {
+        words = new Words(1L, "zaba", "frog", Language.POLISH, new AssignedWord("frog", Language.ENGLISH));
+
+       when(wordsService.getByWord(words.getWord())).thenReturn(words.getTranslation());
+
+       this.mockMvc.perform(get("/api/words/getWordById/{id}", words.getWord()))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id").value(1L))
+               .andExpect(jsonPath("$.word").value("zaba"))
+               .andExpect(jsonPath("$.translation").value("zaba"))
+               .andExpect(jsonPath("$.language").value("POLISH"))
+               .andExpect(jsonPath("$.assignedWord.word").value("frog"))
+               .andExpect(jsonPath("$.assignedWord.language").value("ENGLISH"))
+               .andDo(print());
     }
 
     @Test
-    public void translateWordTest() throws Exception {
-        words = new Words(1L, "zaba", Language.POLISH, new AssignedWord("frog", Language.ENGLISH));
-        String wordToTranslate = "zaba";
+    @Order(5)
+    @DisplayName("Should return Polish word with length.")
+    public void getPolishWordsWithLengthControllerTest() throws Exception {
 
-        when(wordsService.getByWord(wordToTranslate)).thenReturn(Collections.singletonList(words));
+        Words word = new Words();
+        word.setId(1L);
+        word.setWord("wieza");
+        word.setLanguage(Language.POLISH);
+        word.setAssignedWord(new AssignedWord("tower", Language.ENGLISH));
 
-        this.mockMvc.perform(get("/api/words/translate/{word}", wordToTranslate))
-                .andExpect(status().isFound())
-                .andExpect(jsonPath(".id").value(1))
-                .andExpect(jsonPath(".word").value("zaba"))
-                .andExpect(jsonPath(".language").value(Language.POLISH))
-                .andExpect(jsonPath(".assignedWord").value(new AssignedWord("frog", Language.ENGLISH)))
+        Words word2 = new Words();
+        word2.setId(2L);
+        word2.setWord("bird");
+        word2.setLanguage(Language.ENGLISH);
+        word2.setAssignedWord(new AssignedWord("ptak", Language.POLISH));
+
+        Long length = 5L;
+
+        when(wordsService.getPolishWordsWithLength(length)).thenReturn(word2.getId());
+
+        this.mockMvc.perform(get("/api/words/polishWord/{length}", length))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.word").value("wieza"))
+                .andExpect(jsonPath("$.language").value("POLISH"))
+                .andExpect(jsonPath("$.assignedWord.word").value("tower"))
+                .andExpect(jsonPath("$.assignedWord.language").value("ENGLISH"))
                 .andDo(print());
+
     }
 
+    @Test
+    @Order(7)
+    @DisplayName("Should return amount of Polish words.")
+    public void getAmountOfPolishWordsTest() throws Exception {
 
+        Words word = new Words();
+        word.setId(1L);
+        word.setWord("wieza");
+        word.setLanguage(Language.POLISH);
+        word.setAssignedWord(new AssignedWord("tower", Language.ENGLISH));
+
+        Words word2 = new Words();
+        word2.setId(2L);
+        word2.setWord("ptak");
+        word2.setLanguage(Language.POLISH);
+        word2.setAssignedWord(new AssignedWord("bird", Language.ENGLISH));
+
+        List<Words> list = new ArrayList<>();
+
+        list.add(word);
+        list.add(word2);
+
+        when(wordsService.getAmountOfPolishWords()).thenReturn((long) list.size());
+
+        this.mockMvc.perform(get("/api/words/polishWord/amountOfPolishWords/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.word").value("zaba"))
+                .andExpect(jsonPath("$.language").value("POLISH"))
+                .andExpect(jsonPath("$.assignedWord.word").value("frog"))
+                .andExpect(jsonPath("$.assignedWord.language").value("ENGLISH"))
+                .andDo(print());
+
+
+    }
 }

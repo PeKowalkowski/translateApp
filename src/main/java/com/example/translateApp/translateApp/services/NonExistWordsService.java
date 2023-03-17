@@ -1,6 +1,8 @@
 package com.example.translateApp.translateApp.services;
 
 import com.example.translateApp.translateApp.entities.NonExistWords;
+import com.example.translateApp.translateApp.entities.Words;
+import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
 import com.example.translateApp.translateApp.repositories.NonExistWordsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,10 +49,18 @@ public class NonExistWordsService {
         return nonExistWordsList;
 
     }
+    public Optional<NonExistWords> getNonExistWordsById(Long id) {
+        Optional<NonExistWords> nonExistWords = Optional.ofNullable(nonExistWordsRepository.findById(id).orElseThrow(() -> new WordNotFoundException(id)));
+        logger.info("Loaded non exist word with id : " + id);
+        return nonExistWords;
+    }
 
     public Long getAmountOfNonExistWords() {
         Long count = nonExistWordsRepository.getAmountOfNonExistWords();
         logger.info("Amount of Non Exist Words : " + count);
         return count;
     }
+
+
+
 }

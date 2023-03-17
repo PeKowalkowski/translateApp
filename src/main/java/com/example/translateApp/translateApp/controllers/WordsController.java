@@ -1,7 +1,6 @@
 package com.example.translateApp.translateApp.controllers;
 
 import com.example.translateApp.translateApp.dtos.WordsDto;
-import com.example.translateApp.translateApp.entities.AssignedWord;
 import com.example.translateApp.translateApp.entities.Words;
 import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
 import com.example.translateApp.translateApp.services.AssignedWordService;
@@ -59,15 +58,14 @@ public class WordsController {
 
 
     @GetMapping("/translate/{word}")
-    public ResponseEntity<List<Words>> translateWord(@PathVariable String word) {
-
-        List<Words> wordsList = wordsService.getByWord(word);
-        return ResponseEntity.ok(wordsList);
+    public ResponseEntity<String> translateWord(@PathVariable String word) {
+        String translate = wordsService.getByWord(word);
+        return ResponseEntity.ok(translate);
     }
 
     @GetMapping("/translateSentence/{sentence}")
-    public ResponseEntity<String[]> translateSentence(@PathVariable String sentence) {
-        String[] wordsList = wordsService.getBySentence(sentence);
+    public ResponseEntity<List<String>> translateSentence(@PathVariable String sentence) {
+        List<String> wordsList = wordsService.getBySentence(sentence);
         return ResponseEntity.ok(wordsList);
     }
 

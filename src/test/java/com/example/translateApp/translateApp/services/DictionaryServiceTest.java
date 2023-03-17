@@ -9,7 +9,9 @@ import com.example.translateApp.translateApp.exceptions.WordNotFoundException;
 import com.example.translateApp.translateApp.mapper.WordsMapper;
 import com.example.translateApp.translateApp.repositories.DictionaryRepository;
 import com.example.translateApp.translateApp.repositories.NonExistWordsRepository;
+/*
 import com.example.translateApp.translateApp.repositories.WordsDtoRepository;
+*/
 import com.example.translateApp.translateApp.repositories.WordsRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;

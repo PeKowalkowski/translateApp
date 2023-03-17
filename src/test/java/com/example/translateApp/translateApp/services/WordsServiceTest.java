@@ -48,7 +48,7 @@ class WordsServiceTest {
     @DisplayName("Should save new word with assigned word to database.")
     public void addWordsWithAssignedWordTest() {
 
-        WordsDto word = new WordsDto();/*(3L, "wieza", Language.POLISH, new AssignedWord("tower", Language.ENGLISH))*/;
+        WordsDto word = new WordsDto();
         word.setId(1L);
         word.setWord("wieza");
         word.setLanguage(Language.POLISH);
@@ -143,7 +143,78 @@ class WordsServiceTest {
 
     @Test
     @Order(5)
+    @DisplayName("Should translate word.")
     public void translateWordTest() {
+        Words word = new Words();
+        word.setId(1L);
+        word.setWord("telefon");
+        word.setTranslation("phone");
+        word.setLanguage(Language.POLISH);
+        word.setAssignedWord(new AssignedWord("phone", Language.ENGLISH));
+
+/*
+        when(wordsRepository.getByWord2(word.getWord())).thenReturn(word.getTranslation());
+*/
+
+
+        assertEquals(word.getTranslation(), wordsService.getByWord(word.getWord()));
+
+    }
+    @Test
+    @Order(5)
+    @DisplayName("Should return Polish word with length.")
+    public void getPolishWordsWithLengthTest(){
+        Words word = new Words();
+        word.setId(1L);
+        word.setWord("wieza");
+        word.setLanguage(Language.POLISH);
+        word.setAssignedWord(new AssignedWord("tower", Language.ENGLISH));
+
+        Words word2 = new Words();
+        word2.setId(2L);
+        word2.setWord("bird");
+        word2.setLanguage(Language.ENGLISH);
+        word2.setAssignedWord(new AssignedWord("ptak", Language.POLISH));
+
+        Long length = 5L;
+
+        when(wordsRepository.getPolishWordsByLength(anyLong())).thenReturn(word.getId());
+
+        Long existingWord = wordsService.getPolishWordsWithLength(length);
+
+        assertNotNull(existingWord);
+        assertThat(existingWord).isNotEqualTo(null);
+    }
+    @Test
+    @Order(6)
+    @DisplayName("Should return English word with length.")
+    public void getEnglishWordsWithLengthTest(){
+        Words word = new Words();
+        word.setId(1L);
+        word.setWord("wieza");
+        word.setLanguage(Language.POLISH);
+        word.setAssignedWord(new AssignedWord("tower", Language.ENGLISH));
+
+        Words word2 = new Words();
+        word2.setId(2L);
+        word2.setWord("bird");
+        word2.setLanguage(Language.ENGLISH);
+        word2.setAssignedWord(new AssignedWord("ptak", Language.POLISH));
+
+        Long length = 4L;
+
+        when(wordsRepository.getEnglishWordsByLength(anyLong())).thenReturn(word2.getId());
+
+        Long existingWord = wordsService.getPolishWordsWithLength(length);
+
+        assertNotNull(existingWord);
+        assertThat(existingWord).isNotEqualTo(null);
+    }
+    @Test
+    @Order(7)
+    @DisplayName("Should return amount of Polish words.")
+    public void getAmountOfPolishWordsTest () {
+
         Words word = new Words();
         word.setId(1L);
         word.setWord("wieza");
@@ -156,13 +227,119 @@ class WordsServiceTest {
         word2.setLanguage(Language.POLISH);
         word2.setAssignedWord(new AssignedWord("bird", Language.ENGLISH));
 
-        String wordToTranslate = "wieza";
+        List<Words> list = new ArrayList<>();
 
+        list.add(word);
+        list.add(word2);
 
-        assertEquals(wordToTranslate, wordsService.getByWord(word.getAssignedWord().getWord()));
+        Long expectedSize = 2L;
+
+        when(wordsRepository.getAmountOfPolishWords()).thenReturn(expectedSize);
+
+        Long size = (long) list.size();
+
+        assertEquals(expectedSize, size);
+        assertNotNull(expectedSize);
 
     }
+    @Test
+    @Order(8)
+    @DisplayName("Should return amount of English words.")
+    public void getAmountOfEnglishWordsTest () {
 
+        Words word = new Words();
+        word.setId(1L);
+        word.setWord("tower");
+        word.setLanguage(Language.ENGLISH);
+        word.setAssignedWord(new AssignedWord("wieza", Language.POLISH));
+
+        Words word2 = new Words();
+        word2.setId(2L);
+        word2.setWord("bird");
+        word2.setLanguage(Language.ENGLISH);
+        word2.setAssignedWord(new AssignedWord("ptak", Language.POLISH));
+
+        List<Words> list = new ArrayList<>();
+
+        list.add(word);
+        list.add(word2);
+
+        Long expectedSize = 2L;
+
+        when(wordsRepository.getAmountOfEnglishWords()).thenReturn(expectedSize);
+
+        Long size = (long) list.size();
+
+        assertEquals(expectedSize, size);
+        assertNotNull(expectedSize);
+
+    }
+    @Test
+    @Order(9)
+    @DisplayName("Should return average length of Polish words.")
+    public void getAvgLengthOfPolishWordsTest(){
+
+        Words word = new Words();
+        word.setId(1L);
+        word.setWord("wieza");
+        word.setLanguage(Language.POLISH);
+        word.setAssignedWord(new AssignedWord("tower", Language.ENGLISH));
+
+        Words word2 = new Words();
+        word2.setId(2L);
+        word2.setWord("ptak");
+        word2.setLanguage(Language.POLISH);
+        word2.setAssignedWord(new AssignedWord("bird", Language.ENGLISH));
+
+        List<Words> list = new ArrayList<>();
+
+        list.add(word);
+        list.add(word2);
+
+        Long wordL = (long) list.get(0).getWord().length();
+        Long word2L = (long) list.get(1).getWord().length();
+
+        Long averageLength = (wordL + word2L) / list.size();
+        Long expectedAverageLength = 4L;
+
+        when(wordsRepository.getAvgLengthOfPolishWords()).thenReturn(expectedAverageLength);
+
+        assertEquals(expectedAverageLength, averageLength);
+        assertNotNull(expectedAverageLength);
+    }
+    @Test
+    @Order(10)
+    @DisplayName("Should return average length of English words.")
+    public void getAvgLengthOfEnglishWordsTest(){
+
+        Words word = new Words();
+        word.setId(1L);
+        word.setWord("tower");
+        word.setLanguage(Language.ENGLISH);
+        word.setAssignedWord(new AssignedWord("wieza", Language.POLISH));
+
+        Words word2 = new Words();
+        word2.setId(2L);
+        word2.setWord("bird");
+        word2.setLanguage(Language.ENGLISH);
+        word2.setAssignedWord(new AssignedWord("ptak", Language.POLISH));
+
+        List<Words> list = new ArrayList<>();
+
+        list.add(word);
+        list.add(word2);
+
+        Long wordL = (long) list.get(0).getWord().length();
+        Long word2L = (long) list.get(1).getWord().length();
+
+        Long averageLength = (wordL + word2L) / list.size();
+        Long expectedAverageLength = 4L;
+
+        when(wordsRepository.getAvgLengthOfPolishWords()).thenReturn(expectedAverageLength);
+
+        assertEquals(expectedAverageLength, averageLength);
+        assertNotNull(expectedAverageLength);
+    }
 
 
 }

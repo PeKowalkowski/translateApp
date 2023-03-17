@@ -10,11 +10,10 @@ public class WordsMapperImpl implements WordsMapper{
     public WordsDto wordsToWordsDto(Words words) {
         WordsDto wordsDto = new WordsDto();
 
-        wordsDto.setId(words.getId());
         wordsDto.setWord(words.getWord());
         wordsDto.setLanguage(words.getLanguage());
         wordsDto.setAssignedWord(words.getAssignedWord());
-        wordsDto.setDictionary(words.getDictionary());
+        wordsDto.setTranslation(words.getTranslation());
         return wordsDto;
     }
 
@@ -22,12 +21,10 @@ public class WordsMapperImpl implements WordsMapper{
     public Words wordsDtoToWords(WordsDto wordsDto) {
         Words words = new Words();
 
-        words.setId(wordsDto.getId());
         words.setWord(wordsDto.getWord());
         words.setLanguage(wordsDto.getLanguage());
         words.setAssignedWord(wordsDto.getAssignedWord());
-        words.setDictionary(wordsDto.getDictionary());
-
+        words.setTranslation(wordsDto.getTranslation());
         return words;
     }
 }

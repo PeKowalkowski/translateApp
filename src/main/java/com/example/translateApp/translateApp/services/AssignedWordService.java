@@ -28,12 +28,23 @@ public class AssignedWordService {
         this.assignedWordsRepository = assignedWordsRepository;
         this.wordsRepository = wordsRepository;
     }
+    public List<AssignedWord> getAssignedWords() {
+        List<AssignedWord> assignedWordList = assignedWordsRepository.findAll().stream()
+                .map(assignedWords -> {
+                    AssignedWord assignedWord = new AssignedWord(assignedWords.getId(), assignedWords.getWord(), assignedWords.getLanguage());
+                    return assignedWord;
+                })
+                .collect(Collectors.toList());
+        logger.info("Loaded all assigned words from dictionary.");
+        return assignedWordList;
+    }
 
-    public Optional<AssignedWord> getWordById(Long id) {
+    public Optional<AssignedWord> getAssignedWordById(Long id) {
         Optional<AssignedWord> assignedWord = assignedWordsRepository.findById(id);
         logger.info("Loaded assigned word with id : " + id);
         return assignedWord;
     }
+
 
 
 }
